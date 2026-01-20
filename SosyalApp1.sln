@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29515.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SosyalApp1", "src\SosyalApp1.csproj", "{A1B2C3D4-E5F6-7890-GHIJ-KLMNOPQRSTUV}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AnyCPU = Debug|AnyCPU
+		Release|AnyCPU = Release|AnyCPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1B2C3D4-E5F6-7890-GHIJ-KLMNOPQRSTUV}.Debug|AnyCPU.ActiveCfg = Debug|AnyCPU
+		{A1B2C3D4-E5F6-7890-GHIJ-KLMNOPQRSTUV}.Debug|AnyCPU.Build.0 = Debug|AnyCPU
+		{A1B2C3D4-E5F6-7890-GHIJ-KLMNOPQRSTUV}.Release|AnyCPU.ActiveCfg = Release|AnyCPU
+		{A1B2C3D4-E5F6-7890-GHIJ-KLMNOPQRSTUV}.Release|AnyCPU.Build.0 = Release|AnyCPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
