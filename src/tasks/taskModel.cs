@@ -23,5 +23,11 @@ namespace SosyalApp1.src.tasks
         public DateTime CreatedAt { get; set; }
         
         public DateTime? CompletedAt { get; set; }
+        
+        // Evidence-related properties
+        public string EvidenceFileName { get; set; }
+        public string EvidenceFilePath { get; set; }
+        public string EvidenceFileType { get; set; }
+        public long? EvidenceFileSize { get; set; }
     }
 }
