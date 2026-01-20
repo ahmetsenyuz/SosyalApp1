@@ -29,7 +29,6 @@ namespace SosyalApp1.src.tasks
                     AssignedUserId = userId,
                     CreatedAt = DateTime.UtcNow
                 };
-                
                 tasks.Add(task);
                 _tasks.Add(task);
             }
@@ -56,7 +55,7 @@ namespace SosyalApp1.src.tasks
             task.Status = newStatus;
             if (newStatus == "completed")
                 task.CompletedAt = DateTime.UtcNow;
-                
+            
             return true;
         }
 
@@ -79,6 +78,25 @@ namespace SosyalApp1.src.tasks
         public static TaskModel GetTaskDetails(int taskId)
         {
             return _tasks.FirstOrDefault(t => t.Id == taskId);
+        }
+
+        // Upload evidence for a task
+        public static bool UploadEvidence(int taskId, string fileName, string filePath, string fileType, long? fileSize)
+        {
+            var task = _tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task == null) return false;
+
+            // Validate that task is in pending_evidence status
+            if (task.Status != "pending_evidence") return false;
+
+            // Store evidence information
+            task.EvidenceFileName = fileName;
+            task.EvidenceFilePath = filePath;
+            task.EvidenceFileType = fileType;
+            task.EvidenceFileSize = fileSize;
+
+            // Update status to completed
+            return UpdateTaskStatus(taskId, "completed");
         }
     }
 }
