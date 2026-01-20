@@ -9,7 +9,7 @@ namespace SosyalApp1.src.tasks
     [Route("api/[controller]")]
     public class TaskController : ControllerBase
     {
-        // GET: api/task/user/{userId}
+        // GET: api/tasks/user/{userId}
         [HttpGet("user/{userId}")]
         public IActionResult GetTasksForUser(int userId)
         {
@@ -24,7 +24,7 @@ namespace SosyalApp1.src.tasks
             }
         }
 
-        // POST: api/task/generate/{userId}
+        // POST: api/tasks/generate/{userId}
         [HttpPost("generate/{userId}")]
         public IActionResult GenerateTasksForUser(int userId)
         {
@@ -39,7 +39,7 @@ namespace SosyalApp1.src.tasks
             }
         }
 
-        // PUT: api/task/status/{taskId}
+        // PUT: api/tasks/status/{taskId}
         [HttpPut("status/{taskId}")]
         public IActionResult UpdateTaskStatus(int taskId, [FromBody] UpdateTaskStatusRequest request)
         {
@@ -64,7 +64,7 @@ namespace SosyalApp1.src.tasks
             }
         }
 
-        // GET: api/task/details/{taskId}
+        // GET: api/tasks/details/{taskId}
         [HttpGet("details/{taskId}")]
         public IActionResult GetTaskDetails(int taskId)
         {
@@ -83,10 +83,67 @@ namespace SosyalApp1.src.tasks
                 return BadRequest(new { error = "Failed to retrieve task details", message = ex.Message });
             }
         }
-    }
 
-    public class UpdateTaskStatusRequest
-    {
-        public string NewStatus { get; set; }
+        // POST: api/tasks/upload-evidence/{taskId}
+        [HttpPost("upload-evidence/{taskId}")]
+        public IActionResult UploadEvidence(int taskId, [FromForm] UploadEvidenceRequest request)
+        {
+            try
+            {
+                if (request.EvidenceFile == null || request.EvidenceFile.Length == 0)
+                {
+                    return BadRequest(new { error = "Evidence file is required" });
+                }
+
+                // Validate file type and size (example validation)
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
+                var maxFileSize = 5 * 1024 * 1024; // 5MB limit
+
+                var fileExtension = Path.GetExtension(request.EvidenceFile.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return BadRequest(new { error = "Invalid file type. Only JPG, PNG, and GIF files are allowed." });
+                }
+
+                if (request.EvidenceFile.Length > maxFileSize)
+                {
+                    return BadRequest(new { error = "File size exceeds the 5MB limit." });
+                }
+
+                // In a real implementation, you would save the file to storage
+                // For now, we'll just store the file info
+                var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                var filePath = $"uploads/{fileName}"; // This would be actual file path in production
+
+                var success = TaskService.UploadEvidence(
+                    taskId, 
+                    request.EvidenceFile.FileName, 
+                    filePath, 
+                    request.EvidenceFile.ContentType, 
+                    request.EvidenceFile.Length);
+
+                if (!success)
+                {
+                    return BadRequest(new { error = "Failed to upload evidence" });
+                }
+
+                return Ok(new { message = "Evidence uploaded successfully", taskId });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Failed to upload evidence", message = ex.Message });
+            }
+        }
+
+        public class UpdateTaskStatusRequest
+        {
+            public string NewStatus { get; set; }
+        }
+
+        public class UploadEvidenceRequest
+        {
+            public IFormFile EvidenceFile { get; set; }
+        }
     }
 }
